@@ -29,7 +29,8 @@ public class PlayerMovement : MonoBehaviour
     
     private float speed = 5f;
     private float jump = 5f;
-    private float horizontalMoveSpeed; 
+    private float horizontalMoveSpeed;
+    private float verticalMoveSpeed;
     private bool grounded;
     
 
@@ -52,11 +53,11 @@ public class PlayerMovement : MonoBehaviour
         playerScoreText.text = "Score: " + score.ToString();
         
         //joystick hareketi
-        if (joystick.Horizontal > 0.2f)
+        if (joystick.Horizontal > 0.2f )
         {
             horizontalMoveSpeed = 1;
         }
-        else if (joystick.Horizontal < -0.2f)
+        else if (joystick.Horizontal < -0.2f )
         {
             horizontalMoveSpeed = -1;
         }
@@ -70,6 +71,9 @@ public class PlayerMovement : MonoBehaviour
         velocity = new Vector3(horizontalMoveSpeed, 0f);
         transform.position += velocity * speed * Time.deltaTime;
         animator.SetFloat("Speed", Mathf.Abs(joystick.Horizontal));
+
+        
+        
 
         
         
@@ -138,8 +142,10 @@ public class PlayerMovement : MonoBehaviour
             }
             FinishScreen.SetActive(true);
              
-            
+           
         }
+        
+ 
         
         
     }
@@ -155,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Water")
+        if (other.gameObject.tag == "Water" )
         {
             isDead = true;
             Time.timeScale = 0;
@@ -166,9 +172,14 @@ public class PlayerMovement : MonoBehaviour
                 backgroundMusicSource.Stop();
             }
             DeathScreen.SetActive(true);
-             
             
-            
+        }else if (other.gameObject.tag == "Enemy")
+        {
+            if (backgroundMusicSource.isPlaying)
+            {
+                backgroundMusicSource.Stop();
+            }
+            DeathScreen.SetActive(true);
         }
     }
 
